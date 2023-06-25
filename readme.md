@@ -1,7 +1,7 @@
 ### To do app
 La web app è sviluppata in ReactJS, inizializzata tramite ViteJS.
 
-Per avviare la web app in locale, scaricare l'app tramite git clone o scaricando il file zim aprire un terminale, entrare nella cartella todoApp, inserire il comando `npm install` per installare le dipendenze necessarie, dopodiché inserire il comando `npm run dev`. Di default, la web app dovrebbe essere raggiungibile all'indirizzo http://localhost:5173; in caso la porta 5173 sia già occupata da un altro processo, la web app verrà avviata su una porta differente, verificabile dall'output del terminale.
+Per avviare la web app in locale, scaricare il codice, aprire un terminale, entrare nella cartella todoApp, eseguire il comando `npm install` per installare le dipendenze necessarie, dopodiché eseguire il comando `npm run dev`. Di default, la web app dovrebbe essere raggiungibile all'indirizzo http://localhost:5173; in caso la porta 5173 sia già occupata da un altro processo, la web app verrà avviata su una porta differente, verificabile dall'output del terminale.
 
 #### Premessa
 Le chiamate al backend sono simulate dalle fake REST API https://jsonplaceholder.typicode.com/todos. Il database consiste in una lista di 200 oggetti che rappresentano dei task di una todo list. Ogni oggetto contiene 4 chiavi:
@@ -19,7 +19,9 @@ Tenendo conto di quanto detto sopra, possono essere effettuati i seguenti test:
 - creazione nuovo task (purtroppo, non potra essere modificato; per tornare alla situazione iniziale, ricaricare la pagina);
 - modifica testo di un task già esistente;
 - segnare un task già esistente come "completato";
-- cancellare task esistente;
+- cancellzione task esistente;
 - simulazione errore di collegamento con il backend: è sufficiente cancellare una lettera qualsiasi dalla variabile apiUrl in /src/api/api.js;
-- simulazione mancata ricezione dei dati: è sufficiente sostituire setTasks(data) con setTasks('') alla riga 15 di /src/components/TasksList.js;
-- simulazione nessun task presente: cancellare tutti i task presenti o sostituire setTasks(data) con setTasks([]) alla riga 15 di /src/components/TasksList.js;
+- simulazione mancata ricezione dei dati: è sufficiente sostituire `setTasks(data)` con `setTasks('')` alla riga 15 di /src/components/TasksList.js;
+- simulazione nessun task presente: cancellare tutti i task presenti o sostituire `setTasks(data)` con `setTasks([])` alla riga 15 di /src/components/TasksList.js.
+
+Per simulare l'accesso di un altro utente, cambiare il valore della chiave id nello stato `user` alla riga 6 di /src/App.js.
