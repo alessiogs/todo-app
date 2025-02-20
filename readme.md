@@ -1,27 +1,124 @@
-### To do app
-La web app è sviluppata in ReactJS, inizializzata tramite ViteJS.
+# To-Do App  
 
-Per avviare la web app in locale, scaricare il codice, aprire un terminale, entrare nella cartella todoApp, eseguire il comando `npm install` per installare le dipendenze necessarie, dopodiché eseguire il comando `npm run dev`. Di default, la web app dovrebbe essere raggiungibile all'indirizzo http://localhost:5173; in caso la porta 5173 sia già occupata da un altro processo, la web app verrà avviata su una porta differente, verificabile dall'output del terminale.
+This web app is built with **React** and initialized using **Vite**.  
 
-#### Premessa
-Le chiamate al backend sono simulate dalle fake REST API https://jsonplaceholder.typicode.com/todos. Il database consiste in una lista di 200 oggetti che rappresentano dei task di una todo list. Ogni oggetto contiene 4 chiavi:
-- id, da 1 a 200, univoco;
-- idUser, da 1 a 10, indica l'utente che può vedere/modificare il task;
-- title, stringa, indica le istruzioni per completare il task;
-- completed, boolean, indica se il task è stato completato o no.
+## Getting Started  
 
-L'utilizzo di questa fake API presenta dei limiti di utilizzo della web app:
-- NON È POSSIBILE CREARE PIÙ DI UN NUOVO TASK: infatti, il metodo POST utilizzato per simulare la creazione di un task, restituisce un oggetto con id 201 (seguendo la progressività degli id salvati sul database) ma non aggiunge l'elemento al database. Questo significa che, ad ogni chiamata del metodo POST, il nuovo task avrà sempre id 201, creando un conflitto e problemi nelle funzionalità della web app (i task vengono visualizzato mappando la variabile locale "tasks" utilizzando id come key univoca);
-- SI POSSONO EFFETTUARE MODIFICHE (cambiare il testo del task o segnarlo come completato/non completato) SOLO AI TASK GIÀ PRESENTI E NON AL NUOVO TASK CREATO DALL'UTENTE. Infatti, per modificare un task viene fatta una chiamata con metodo PUT all'indirizzo https://jsonplaceholder.typicode.com/todos/:id, dove :id rappresenta l'id del task da modificare. Dal momento che la creazione dei task non aggiunge veramente il task al database, se si prova ad effettuare una modifica al task con id = 201, la chiamata restituisce un errore in quanto https://jsonplaceholder.typicode.com/todos/201 non corrisponde a nessun task.
+To run the web app locally, follow these steps:  
 
-#### Test
-Tenendo conto di quanto detto sopra, possono essere effettuati i seguenti test:
-- creazione nuovo task (purtroppo, non potra essere modificato; per tornare alla situazione iniziale, ricaricare la pagina);
-- modifica testo di un task già esistente;
-- segnare un task già esistente come "completato";
-- cancellazione task esistente;
-- simulazione errore di collegamento con il backend: è sufficiente cancellare una lettera qualsiasi dalla variabile `apiUrl` in /src/api/api.js;
-- simulazione mancata ricezione dei dati: è sufficiente sostituire `setTasks(data)` con `setTasks('')` alla riga 15 di /src/components/TasksList.js;
-- simulazione nessun task presente: cancellare tutti i task presenti o sostituire `setTasks(data)` con `setTasks([])` alla riga 15 di /src/components/TasksList.js.
+1. Download the project code:
 
-Per simulare l'accesso di un altro utente, cambiare il valore della chiave id nello stato `user` alla riga 6 di /src/App.js.
+   ```sh
+   git clone https://github.com/alessiogs/todo-app
+   ```
+   
+3. Navigate to the `todo-app` directory.
+   
+   ```sh
+   cd todo-app
+   ```
+   
+5. Install dependencies:  
+
+   ```sh
+   npm install
+   ```  
+
+6. Start the development server:  
+
+   ```sh
+   npm run dev
+   ```  
+
+7. By default, the web app should be available at [http://localhost:5173](http://localhost:5173).  
+   - If port `5173` is already in use, Vite will start the app on a different port. You can check the terminal output for the correct URL.  
+
+---
+
+## Overview  
+
+The app interacts with a simulated backend using fake REST APIs from:  
+
+🔗 **[JSONPlaceholder - /todos](https://jsonplaceholder.typicode.com/todos)**  
+
+The API provides a list of 200 task objects, where each task has the following structure:  
+
+```json
+{
+  "id": 1,          // Unique ID (1-200)
+  "userId": 3,      // User ID (1-10) who owns the task
+  "title": "Task description",
+  "completed": false // Task status
+}
+```
+
+---
+
+## API Limitations  
+
+Due to the nature of this fake API, there are some **functional limitations**:  
+
+❌ **Cannot persist newly created tasks**  
+- When creating a task via `POST`, the API always returns an object with `id: 201`, but it does **not** actually add the task to the database.  
+- This means that if you refresh the page, the newly created task will disappear.  
+
+❌ **Cannot modify or delete newly created tasks**  
+- Since newly created tasks are not actually stored, trying to modify a task with `id: 201` will result in an error.  
+- Only tasks **already existing in the database (id 1-200)** can be updated or deleted.  
+
+✔️ **Existing tasks can be modified**  
+- You can edit task titles, mark them as completed/incomplete, and delete them.  
+
+---
+
+## Testing  
+
+The following tests can be performed:  
+
+### ✅ Create a new task  
+- Note: The new task **will not persist** after a page reload.  
+
+### ✅ Modify an existing task  
+- Edit the text of any **pre-existing** task (`id 1-200`).  
+- Example PUT request to modify a task:  
+
+### ✅ Mark a task as "Completed"  
+- Toggle the `completed` status of an **existing** task (`id 1-200`).  
+
+### ✅ Delete an existing task  
+- Example DELETE request (`id 1-200`):
+
+### 🛑 Simulate a **backend connection error**  
+- Delete a letter from the `apiUrl` variable in `/src/api/api.js`:  
+
+  ```js
+  const apiUrl = "https://jsonplaceholder.typicode.com/todos"; // Delete a letter to break it
+  ```
+
+### 🛑 Simulate **data fetch failure**  
+- Modify `/src/components/TasksList.js` (line 15) by setting `setTasks("")`:  
+
+  ```js
+  setTasks(""); // Simulate an empty response
+  ```
+
+### 🛑 Simulate **no tasks available**  
+- Modify `/src/components/TasksList.js` (line 15) by setting `setTasks([])`:  
+
+  ```js
+  setTasks([]); // Simulate an empty task list
+  ```
+
+---
+
+## Switching Users  
+
+To simulate logging in as a different user:  
+
+1. Open `/src/App.js`.  
+2. Change the `id` value in the `user` state (line 6):  
+
+   ```js
+   const [user, setUser] = useState({ id: 2 }); // Change to another user ID (1-10)
+   ```
+---
